@@ -1,50 +1,35 @@
 
-const params = new URLSearchParams(location.search);
-const videoId = params.get("video") || "";
-const playlistId = params.get("list") || "";
+const params = new URLSearchParams(window.location.search);
+const video = params.get("video");
+const list = params.get("list");
 
-const iframe = document.getElementById("player");
-const button = document.getElementById("start");
-const status = document.getElementById("status");
+const container = document.getElementById("player-container");
 
-const validVideo = /^[\w-]{11}$/.test(videoId);
-const validPlaylist = /^[\w-]+$/.test(playlistId);
+if (!video && !list) {
+  container.textContent = "Open the extension and paste a YouTube link to play music.";
+} else {
+  const iframe = document.createElement("iframe");
 
-if (!validVideo && !validPlaylist) {
-  status.textContent =
-    "No valid video or playlist. Open the extension and paste a link.";
-  button.disabled = true;
-}
+  iframe.id = "player-frame";
+  iframe.title = "YouTube music player";
+  iframe.allow = "autoplay; encrypted-media; picture-in-picture";
+  iframe.allowFullscreen = true;
+  iframe.referrerPolicy = "strict-origin-when-cross-origin";
 
-button.addEventListener("click", () => {
-  if (!validVideo && !validPlaylist) return;
-
-  const query = new URLSearchParams({
+  const embedParams = new URLSearchParams({
     autoplay: "1",
     playsinline: "1"
   });
 
-  let embedUrl;
-
-  if (validVideo) {
-    if (playlistId && validPlaylist) {
-      query.set("list", playlistId);
-    }
-
-    embedUrl =
-      `https://www.youtube.com/embed/${videoId}?${query}`;
-  } else {
-    query.set("list", playlistId);
-
-    embedUrl =
-      `https://www.youtube.com/embed/videoseries?${query}`;
+  if (list) {
+    embedParams.set("list", list);
   }
 
-  iframe.src = embedUrl;
-  status.textContent =
-    "Loading YouTube. If needed, press Play in the player.";
-});
+  const videoPath = video
+    ? `/embed/${encodeURIComponent(video)}`
+    : "/embed/videoseries";
 
-iframe.addEventListener("load", () => {
-  // The iframe load event does not guarantee playback success.
-});
+  iframe.src = `https://www.youtube.com${videoPath}?${embedParams.toString()}`;
+
+  container.appendChild(iframe);
+}
