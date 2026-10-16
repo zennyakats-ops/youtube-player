@@ -1,0 +1,77 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Minimal YouTube Music</title>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 24px;
+      display: grid;
+      place-items: center;
+      background: #171717;
+      color: #f5f5f5;
+      font-family: Arial, sans-serif;
+    }
+
+    main {
+      width: 100%;
+      max-width: 540px;
+    }
+
+    h1 { font-size: 23px; }
+
+    p {
+      color: #aaa;
+      line-height: 1.5;
+    }
+
+    #player {
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border: 0;
+      border-radius: 12px;
+      background: #252525;
+      margin-top: 16px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 13px;
+      border: 0;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #status { font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>♫ YouTube Music</h1>
+    <p>Listen while you browse other tabs.</p>
+
+    <iframe
+      id="player"
+      title="YouTube music player"
+      allow="autoplay; encrypted-media; picture-in-picture"
+      allowfullscreen
+      referrerpolicy="strict-origin-when-cross-origin">
+    </iframe>
+
+    <button id="start">▶ Start playback</button>
+    <p id="status">Ready to play.</p>
+  </main>
+
+  <script src="./player.js"></script>
+</body>
+</html>
